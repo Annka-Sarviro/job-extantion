@@ -49,7 +49,9 @@
     "permissions": [
       "tabs",
       "activeTab",
-      "scripting"
+      "scripting",
+      "sidePanel",
+      "storage"
     ]
   }
 }

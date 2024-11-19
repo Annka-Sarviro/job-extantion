@@ -7,34 +7,48 @@ const HOME_PAGE = process.env.PLASMO_PUBLIC_HOME_PAGE
 export function SideBar() {
   const [link, setLink] = useState("")
   const [jobTitle, setJobTitle] = useState("")
-  const [status, setStatus] = useState<string>("")
   const [response, setResponse] = useState("")
+  const [currentTab, setCurrentTab] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const getCurrentTab = async () => {
+    let queryOptions = { active: true, lastFocusedWindow: true }
+    let [tab] = await chrome.tabs.query(queryOptions)
+    return tab
+  }
 
   useEffect(() => {
-    const handleMessage = (message: any) => {
+    setIsLoading(true)
+    const handleMessage = (message) => {
       if (message.type === "JOB_DETAILS") {
         setJobTitle(message.payload.jobTitle || "")
         setLink(message.payload.url || "")
       }
     }
 
-    const handleTabUpdate = (tabId, changeInfo, tab) => {
-      if (changeInfo.status === "complete" && tab.active) {
-        chrome.runtime.sendMessage({ type: "FETCH_JOB_DETAILS" })
+    chrome.runtime.onMessage.addListener(handleMessage)
+
+    const handleTabChange = async () => {
+      const tab = await getCurrentTab()
+      if (tab) {
+        setCurrentTab(tab)
+        chrome.tabs.sendMessage(tab.id, { type: "JOB_DETAILS" })
       }
     }
 
-    chrome.runtime.onMessage.addListener(handleMessage)
-    chrome.tabs.onUpdated.addListener(handleTabUpdate)
-
+    chrome.tabs.onActivated.addListener(handleTabChange)
+    chrome.tabs.onUpdated.addListener(handleTabChange)
+    setIsLoading(false)
     return () => {
       chrome.runtime.onMessage.removeListener(handleMessage)
-      chrome.tabs.onUpdated.removeListener(handleTabUpdate) // Pass the callback to remove
+      chrome.tabs.onActivated.removeListener(handleTabChange)
+      chrome.tabs.onUpdated.removeListener(handleTabChange)
     }
-  })
+  }, [currentTab])
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true)
       // const result = await axios.post(
       //   "https://your-server-endpoint.com/api/jobs",
       //   {
@@ -43,7 +57,10 @@ export function SideBar() {
       //   }
       // )
 
-      setResponse("Дані успішно відправлено!")
+      setTimeout(() => {
+        setResponse("Дані успішно відправлено!")
+        setIsLoading(false)
+      }, 500)
     } catch (error) {
       setResponse("Помилка при відправці даних.")
     }
@@ -58,21 +75,30 @@ export function SideBar() {
         </a>{" "}
         extension!
       </h2>
-      <input
-        onChange={(e) => setLink(e.target.value)}
-        value={link}
-        className="border"
-        placeholder="link"
-        id="link"
-      />
-      <input
-        onChange={(e) => setJobTitle(e.target.value)}
-        value={jobTitle}
-        className="border"
-        placeholder="position"
-        id="position"
-      />
-      <button onClick={handleSubmit} style={{ width: "100%", padding: "8px" }}>
+      <div className="flex flex-col gap-y-1">
+        <label htmlFor="link">Link</label>
+        <input
+          onChange={(e) => setLink(e.target.value)}
+          value={link}
+          className="border"
+          placeholder="link"
+          id="link"
+        />
+      </div>
+      <div className="flex flex-col gap-y-1">
+        <label htmlFor="position">Position</label>
+        <input
+          onChange={(e) => setJobTitle(e.target.value)}
+          value={jobTitle}
+          className="border"
+          placeholder="position"
+          id="position"
+        />
+      </div>
+      <button
+        onClick={handleSubmit}
+        disabled={isLoading}
+        className="w-full p-2 bg-blue-950 disabled:bg-gray-500 text-white">
         Відправити
       </button>
       {response && <p>{response}</p>}
