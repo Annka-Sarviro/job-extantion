@@ -13,12 +13,27 @@ export const handleWorkUA = async () => {
     return
   }
 
-  const jobTitle = cardElement.textContent?.trim() || "Не знайдено"
-  const url = window.location.href
+  const position = cardElement.textContent?.trim() || "Не знайдено"
+  const link = window.location.href
+  const companyName = ""
+  const relation = ""
+  const location = ""
+  const workType = "remote"
+  const status = "saved"
+  const notes = ""
 
   chrome.runtime.sendMessage({
     type: "JOB_DETAILS",
-    payload: { jobTitle, url }
+    payload: {
+      position,
+      link,
+      companyName,
+      relation,
+      location,
+      workType,
+      status,
+      notes
+    }
   })
 }
 

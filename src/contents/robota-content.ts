@@ -1,24 +1,14 @@
 import type { PlasmoCSConfig } from "plasmo"
-import type { z } from "zod"
 
-import type { AddDataSchema } from "~components/submitForm"
 import { waitForElement } from "~helpers/waitForElement"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://djinni.co/*"]
+  matches: ["https://robota.ua/*"]
 }
 
-type JobDetailsPayload = z.infer<typeof AddDataSchema>
-
-// Інтерфейс для повідомлення
-interface JobDetailsMessage {
-  type: "JOB_DETAILS"
-  payload: JobDetailsPayload
-}
-
-export const handleDjinni = async () => {
+export const handleRobota = async () => {
   const jobPostElement = (await waitForElement(
-    ".job-post-page h1"
+    "[data-id='vacancy-title']"
   )) as HTMLElement
 
   if (!jobPostElement) {
@@ -35,7 +25,7 @@ export const handleDjinni = async () => {
   const status = "saved"
   const notes = ""
 
-  chrome.runtime.sendMessage<JobDetailsMessage>({
+  chrome.runtime.sendMessage({
     type: "JOB_DETAILS",
     payload: {
       position,
@@ -50,12 +40,12 @@ export const handleDjinni = async () => {
   })
 }
 
-handleDjinni()
+handleRobota()
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "JOB_DETAILS") {
-    if (window.location.href.includes("djinni.co")) {
-      handleDjinni()
+    if (window.location.href.includes("robota.ua")) {
+      handleRobota()
     }
   }
 })

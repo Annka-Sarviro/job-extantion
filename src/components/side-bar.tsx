@@ -2,14 +2,21 @@ import { useEffect, useState } from "react"
 
 import "~styles"
 
+import { SubmitForm } from "./submitForm"
+
 const HOME_PAGE = process.env.PLASMO_PUBLIC_HOME_PAGE
 
 export function SideBar() {
+  const [companyName, setCompanyName] = useState("")
   const [link, setLink] = useState("")
-  const [jobTitle, setJobTitle] = useState("")
-  const [response, setResponse] = useState("")
+  const [position, setPosition] = useState("")
+  const [relation, setRelation] = useState("")
+  const [location, setLocation] = useState("")
+  const [workType, setWorkType] = useState("remote")
+  const [status, setStatus] = useState("saved")
+  const [notes, setNotes] = useState("")
+
   const [currentTab, setCurrentTab] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
 
   const getCurrentTab = async () => {
     let queryOptions = { active: true, lastFocusedWindow: true }
@@ -18,11 +25,16 @@ export function SideBar() {
   }
 
   useEffect(() => {
-    setIsLoading(true)
     const handleMessage = (message) => {
       if (message.type === "JOB_DETAILS") {
-        setJobTitle(message.payload.jobTitle || "")
-        setLink(message.payload.url || "")
+        setCompanyName(message.payload.companyName || "")
+        setPosition(message.payload.position || "")
+        setLink(message.payload.link || "")
+        setRelation(message.payload.relation || "")
+        setLocation(message.payload.location || "")
+        setWorkType(message.payload.workType || "remote")
+        setStatus(message.payload.status || "saved")
+        setNotes(message.payload.notes || "")
       }
     }
 
@@ -38,7 +50,7 @@ export function SideBar() {
 
     chrome.tabs.onActivated.addListener(handleTabChange)
     chrome.tabs.onUpdated.addListener(handleTabChange)
-    setIsLoading(false)
+
     return () => {
       chrome.runtime.onMessage.removeListener(handleMessage)
       chrome.tabs.onActivated.removeListener(handleTabChange)
@@ -46,62 +58,26 @@ export function SideBar() {
     }
   }, [currentTab])
 
-  const handleSubmit = async () => {
-    try {
-      setIsLoading(true)
-      // const result = await axios.post(
-      //   "https://your-server-endpoint.com/api/jobs",
-      //   {
-      //     jobTitle,
-      //     url
-      //   }
-      // )
-
-      setTimeout(() => {
-        setResponse("Дані успішно відправлено!")
-        setIsLoading(false)
-      }, 500)
-    } catch (error) {
-      setResponse("Помилка при відправці даних.")
-    }
-  }
-
   return (
-    <div className="p-2 flex flex-col gap-y-4">
-      <h2>
-        Welcome to your{" "}
-        <a href={HOME_PAGE} target="_blank">
-          Job Tracker{" "}
-        </a>{" "}
-        extension!
+    <div className="p-2 flex flex-col gap-y-2">
+      <h2 className="font-bold text-xl text-center inline-block w-60 mx-auto">
+        Вітаємо у розширенні{" "}
+        <a href={HOME_PAGE} target="_blank" className="text-accent">
+          Job Tracker
+        </a>
       </h2>
-      <div className="flex flex-col gap-y-1">
-        <label htmlFor="link">Link</label>
-        <input
-          onChange={(e) => setLink(e.target.value)}
-          value={link}
-          className="border"
-          placeholder="link"
-          id="link"
-        />
-      </div>
-      <div className="flex flex-col gap-y-1">
-        <label htmlFor="position">Position</label>
-        <input
-          onChange={(e) => setJobTitle(e.target.value)}
-          value={jobTitle}
-          className="border"
-          placeholder="position"
-          id="position"
-        />
-      </div>
-      <button
-        onClick={handleSubmit}
-        disabled={isLoading}
-        className="w-full p-2 bg-blue-950 disabled:bg-gray-500 text-white">
-        Відправити
-      </button>
-      {response && <p>{response}</p>}
+      <SubmitForm
+        data={{
+          companyName,
+          position,
+          link,
+          relation,
+          location,
+          workType: workType as "remote" | "office" | "hybrid",
+          status: status as "saved" | "new" | "hr" | "test" | "tech" | "reject",
+          notes
+        }}
+      />
     </div>
   )
 }

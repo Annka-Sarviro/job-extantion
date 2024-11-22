@@ -1,5 +1,3 @@
-console.log("start background")
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "JOB_DETAILS") {
     chrome.runtime.sendMessage(message)
@@ -21,4 +19,3 @@ chrome.tabs.onActivated.addListener(() => {
 chrome.tabs.onUpdated.addListener(() => {
   chrome.runtime.sendMessage({ type: "JOB_DETAILS" })
 })
-console.log("end background")

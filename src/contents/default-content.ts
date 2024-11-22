@@ -6,17 +6,32 @@ export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
 }
 
-const blockedDomains = ["djinni.co", "work.ua", "example.com"]
+const blockedDomains = ["djinni.co", "work.ua", "robota.ua"]
 
 export const handle = async () => {
   const cardElement = (await waitForElement(" h1")) as HTMLElement
 
-  const jobTitle = cardElement?.textContent?.trim() || "Не знайдено"
-  const url = window.location.href
+  const position = cardElement?.textContent?.trim() || "Не знайдено"
+  const link = window.location.href
+  const companyName = ""
+  const relation = ""
+  const location = ""
+  const workType = "remote"
+  const status = "saved"
+  const notes = ""
 
   chrome.runtime.sendMessage({
     type: "JOB_DETAILS",
-    payload: { jobTitle, url }
+    payload: {
+      position,
+      link,
+      companyName,
+      relation,
+      location,
+      workType,
+      status,
+      notes
+    }
   })
 }
 
