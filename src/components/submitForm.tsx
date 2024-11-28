@@ -13,9 +13,9 @@ interface SubmitFormProps {
   data: z.infer<typeof AddDataSchema>
 }
 
-const titleRegex = /^[a-zA-Zа-яА-ЯіІїЇєЄґҐ.,'’\-!()?:;+= ]+$/
+const titleRegex = /^[a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9.,'’\-!|/()?:;+= ]+$/
 const urlRegex =
-  /^(https?:\/\/(?:www\.)?|www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?$/
+  /^(https?:\/\/(?:www\.)?|www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+\/?[^\s]*$/
 
 export const AddDataSchema = z.object({
   companyName: z
@@ -43,7 +43,7 @@ export const AddDataSchema = z.object({
     .regex(titleRegex, `Regex error`)
     .max(50, `Max 50`)
     .min(2, `Min 2`),
-  workType: z.enum(["remote", "office", "hybrid", "undefined"]),
+  workType: z.enum(["remote", "office", "hybrid"]),
   status: z.enum(["saved", "new", "hr", "test", "tech", "reject"]),
   notes: z.string().max(500, `Max 500`).optional()
 })
@@ -56,7 +56,8 @@ export const SubmitForm = ({ data }: SubmitFormProps) => {
     reset,
     resetField,
     watch,
-    formState: { errors, isDirty }
+    setValue,
+    formState: { errors, isValid }
   } = useForm<z.infer<typeof AddDataSchema>>({
     defaultValues: {
       companyName: "",
@@ -64,7 +65,7 @@ export const SubmitForm = ({ data }: SubmitFormProps) => {
       link: "",
       relation: "",
       location: "",
-      workType: "undefined",
+      workType: null,
       status: "saved",
       notes: ""
     },
@@ -164,6 +165,7 @@ export const SubmitForm = ({ data }: SubmitFormProps) => {
           name="workType"
           register={register}
           errors={errors}
+          setValue={setValue}
           value={workType}
           className="pt-2"
           options={[

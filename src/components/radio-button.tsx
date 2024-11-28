@@ -22,6 +22,7 @@ export interface RadioButtonProps {
   errors: FieldErrors
   value?: string
   id?: string
+  setValue?: any
 }
 
 export const RadioButton = ({
@@ -30,18 +31,19 @@ export const RadioButton = ({
   className,
   register,
   value,
+  errors,
+  setValue,
   id
 }: RadioButtonProps) => {
-  const [selectedValue, setSelectedValue] = useState(value || "")
-
+  const [selectedValue, setSelectedValue] = useState(value || null)
+  console.log("err", errors["workType"])
   useEffect(() => {
-    if (value) {
-      setSelectedValue(value)
-    }
+    setSelectedValue(value)
   }, [value])
 
   const handleSelect = (value: string) => {
     setSelectedValue(value)
+    setValue(name, value)
   }
 
   return (
@@ -67,9 +69,11 @@ export const RadioButton = ({
               className={cn(
                 "h-5 w-5 flex-shrink-0 rounded border-2 transition-all flex items-center justify-center",
                 {
-                  "bg-card-blue border-text-primary":
+                  ["bg-card-blue border-text-primary"]:
                     selectedValue === option.value,
-                  "bg-white border-text-primary": selectedValue !== option.value
+                  ["bg-white border-text-primary"]:
+                    selectedValue !== option.value,
+                  ["!border-error"]: !selectedValue && errors[name]
                 }
               )}>
               {selectedValue === option.value && (

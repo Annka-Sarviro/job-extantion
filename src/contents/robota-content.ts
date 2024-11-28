@@ -38,7 +38,7 @@ export const handleRobota = async () => {
   )) as HTMLElement
 
   const position = positionElement.textContent?.trim() || "Не знайдено"
-  const link = window.location.href
+  const link = `${window.location.origin}${window.location.pathname}`
   const companyName =
     companyEl.querySelector('a[href*="/company"] span')?.textContent.trim() ||
     "Не знайдено"

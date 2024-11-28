@@ -18,7 +18,7 @@ export const handleWorkUA = async () => {
   ).find((li) => li.querySelector("span[title='Адреса роботи']"))
 
   const position = positionElement?.textContent?.trim() || "Не знайдено"
-  const link = window.location.href
+  const link = `${window.location.origin}${window.location.pathname}`
   const companyName =
     liNameElement?.querySelector("a span")?.textContent?.trim() || "Не знайдено"
   const relation = ""

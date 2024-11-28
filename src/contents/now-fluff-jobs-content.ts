@@ -7,50 +7,39 @@ import { waitForElement } from "~helpers/waitForElement"
 import { getWorkType } from "../helpers/getWorkType"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://djinni.co/jobs/*"]
+  matches: ["https://nofluffjobs.com/*"]
 }
 
 type JobDetailsPayload = z.infer<typeof AddDataSchema>
 
-// Інтерфейс для повідомлення
 interface JobDetailsMessage {
   type: "JOB_DETAILS"
   payload: JobDetailsPayload
 }
 
-export const handleDjinni = async () => {
-  const jobPositionElement = (await waitForElement(
-    ".job-post-page h1"
+export const handleFluff = async () => {
+  const companyElement = (await waitForElement(
+    "common-posting-content-wrapper"
   )) as HTMLElement
 
-  const jobCompanyElement = (await waitForElement(
-    "header a.text-reset"
-  )) as HTMLElement
+  const vacancyTitleElement = companyElement.querySelector(
+    "[data-cy='JobOffer_CompanyProfile']"
+  )
+  const jobPositionElement = companyElement.querySelector("h1")
 
-  const locationElement = (await waitForElement(
-    "aside .card .location-text"
-  )) as HTMLElement
-
-  const liElement = Array.from(
-    document.querySelectorAll("aside .card ul li")
-  ).find(
-    (li) =>
-      li
-        .querySelector("strong")
-        ?.textContent?.toLowerCase()
-        ?.includes("офіс") ||
-      li
-        .querySelector("strong")
-        ?.textContent?.toLowerCase()
-        ?.includes("віддалено")
+  const locationElement = companyElement.querySelector(
+    "common-posting-locations span"
   )
 
-  const workTypeText = liElement.querySelector("strong")?.textContent?.trim()
-  const workType = getWorkType(workTypeText) || undefined
+  const workTypeText = companyElement
+    .querySelector("li[common-posting-locations-provinces]")
+    ?.textContent?.trim()
+
+  const workType = getWorkType(workTypeText)
 
   const position = jobPositionElement?.textContent?.trim() || "Не знайдено"
   const link = `${window.location.origin}${window.location.pathname}`
-  const companyName = jobCompanyElement?.textContent?.trim() || "Не знайдено"
+  const companyName = vacancyTitleElement?.textContent?.trim() || "Не знайдено"
   const relation = ""
   const location = locationElement?.textContent?.trim() || "Не знайдено"
   const status = "saved"
@@ -71,12 +60,12 @@ export const handleDjinni = async () => {
   })
 }
 
-handleDjinni()
+handleFluff()
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "JOB_DETAILS") {
-    if (window.location.href.includes("djinni.co")) {
-      handleDjinni()
+    if (window.location.href.includes("nofluffjobs.com")) {
+      handleFluff()
     }
   }
 })

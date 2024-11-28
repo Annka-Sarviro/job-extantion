@@ -12,7 +12,7 @@ export function SideBar() {
   const [position, setPosition] = useState("")
   const [relation, setRelation] = useState("")
   const [location, setLocation] = useState("")
-  const [workType, setWorkType] = useState("remote")
+  const [workType, setWorkType] = useState(null)
   const [status, setStatus] = useState("saved")
   const [notes, setNotes] = useState("")
 
@@ -32,7 +32,7 @@ export function SideBar() {
         setLink(message.payload.link || "")
         setRelation(message.payload.relation || "")
         setLocation(message.payload.location || "")
-        setWorkType(message.payload.workType || "remote")
+        setWorkType(message.payload.workType)
         setStatus(message.payload.status || "saved")
         setNotes(message.payload.notes || "")
       }
@@ -73,7 +73,7 @@ export function SideBar() {
           link,
           relation,
           location,
-          workType: workType as "remote" | "office" | "hybrid",
+          workType: workType as "remote" | "office" | "hybrid" | null,
           status: status as "saved" | "new" | "hr" | "test" | "tech" | "reject",
           notes
         }}

@@ -74,7 +74,7 @@ export const Input = ({
             <button
               onClick={() => handleResetField(name)}
               className={
-                "absolute right-2 top-[50%] mt-auto h-6 translate-y-[-50%] cursor-pointer"
+                "absolute right-2 top-[50%] mt-auto h-6 translate-y-[-50%] cursor-pointer bg-white"
               }>
               <svg
                 width="24"
