@@ -1,24 +1,29 @@
 import type { PlasmoCSConfig } from "plasmo"
 
+import { getWorkType } from "~helpers/getWorkType"
 import { waitForElement } from "~helpers/waitForElement"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://www.work.ua/*"]
 }
 export const handleWorkUA = async () => {
-  const cardElement = (await waitForElement(".card h1")) as HTMLElement
+  const positionElement = (await waitForElement(".card h1")) as HTMLElement
 
-  if (!cardElement) {
-    console.warn("Елемент .card не знайдено.")
-    return
-  }
+  const liNameElement = Array.from(
+    document.querySelectorAll(".card .wordwrap ul li")
+  ).find((li) => li.querySelector("span[title='Дані про компанію']"))
 
-  const position = cardElement.textContent?.trim() || "Не знайдено"
+  const liWorkTypeElement = Array.from(
+    document.querySelectorAll(".card .wordwrap ul li")
+  ).find((li) => li.querySelector("span[title='Адреса роботи']"))
+
+  const position = positionElement?.textContent?.trim() || "Не знайдено"
   const link = window.location.href
-  const companyName = ""
+  const companyName =
+    liNameElement?.querySelector("a span")?.textContent?.trim() || "Не знайдено"
   const relation = ""
-  const location = ""
-  const workType = "remote"
+  const location = liWorkTypeElement?.textContent?.trim() || "Не знайдено"
+  const workType = getWorkType(liWorkTypeElement?.textContent?.trim())
   const status = "saved"
   const notes = ""
 

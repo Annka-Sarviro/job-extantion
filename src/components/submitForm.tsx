@@ -36,19 +36,14 @@ export const AddDataSchema = z.object({
     .regex(urlRegex, `Regex error`)
     .max(500, `Max 500`)
     .min(2, `Min 2`),
-  relation: z
-    .string()
-    .min(1, "Required")
-    .regex(titleRegex, `Regex error`)
-    .max(50, `Max 50`)
-    .min(2, `Min 2`),
+  relation: z.string().max(50, `Max 50`).optional(),
   location: z
     .string()
     .min(1, "Required")
     .regex(titleRegex, `Regex error`)
     .max(50, `Max 50`)
     .min(2, `Min 2`),
-  workType: z.enum(["remote", "office", "hybrid"]),
+  workType: z.enum(["remote", "office", "hybrid", "undefined"]),
   status: z.enum(["saved", "new", "hr", "test", "tech", "reject"]),
   notes: z.string().max(500, `Max 500`).optional()
 })
@@ -69,7 +64,7 @@ export const SubmitForm = ({ data }: SubmitFormProps) => {
       link: "",
       relation: "",
       location: "",
-      workType: "remote",
+      workType: "undefined",
       status: "saved",
       notes: ""
     },

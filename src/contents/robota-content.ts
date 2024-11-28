@@ -1,5 +1,6 @@
 import type { PlasmoCSConfig } from "plasmo"
 
+import { getWorkType } from "~helpers/getWorkType"
 import { waitForElement } from "~helpers/waitForElement"
 
 export const config: PlasmoCSConfig = {
@@ -7,21 +8,43 @@ export const config: PlasmoCSConfig = {
 }
 
 export const handleRobota = async () => {
-  const jobPostElement = (await waitForElement(
+  const positionElement = (await waitForElement(
     "[data-id='vacancy-title']"
   )) as HTMLElement
 
-  if (!jobPostElement) {
+  if (!positionElement) {
     console.warn("Елемент .job-post-page h1 не знайдено.")
     return
   }
 
-  const position = jobPostElement.textContent?.trim() || "Не знайдено"
+  const companyEl = Array.from(document.querySelectorAll("lib-content")).find(
+    (a) => a.querySelector('a[href*="/company"]')
+  )
+
+  const descriptionCompanyEl = companyEl.querySelector("lib-badges-list")
+
+  const workTypeText = Array.from(descriptionCompanyEl.querySelectorAll("div"))
+    .find(
+      (div) =>
+        div?.textContent?.includes("В офісі/на місці") ||
+        div?.textContent?.includes("Віддалена робота") ||
+        div?.textContent?.includes("Гібридна")
+    )
+    .querySelector("div")
+    ?.textContent?.trim()
+
+  const cityElement = (await waitForElement(
+    "[data-id='vacancy-city']"
+  )) as HTMLElement
+
+  const position = positionElement.textContent?.trim() || "Не знайдено"
   const link = window.location.href
-  const companyName = ""
+  const companyName =
+    companyEl.querySelector('a[href*="/company"] span')?.textContent.trim() ||
+    "Не знайдено"
   const relation = ""
-  const location = ""
-  const workType = "remote"
+  const location = cityElement.textContent?.trim() || "Не знайдено"
+  const workType = getWorkType(workTypeText)
   const status = "saved"
   const notes = ""
 

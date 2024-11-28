@@ -4,8 +4,10 @@ import type { z } from "zod"
 import type { AddDataSchema } from "~components/submitForm"
 import { waitForElement } from "~helpers/waitForElement"
 
+import { getWorkType } from "../helpers/getWorkType"
+
 export const config: PlasmoCSConfig = {
-  matches: ["https://djinni.co/*"]
+  matches: ["https://djinni.co/jobs/*"]
 }
 
 type JobDetailsPayload = z.infer<typeof AddDataSchema>
@@ -17,21 +19,39 @@ interface JobDetailsMessage {
 }
 
 export const handleDjinni = async () => {
-  const jobPostElement = (await waitForElement(
+  const jobPositionElement = (await waitForElement(
     ".job-post-page h1"
   )) as HTMLElement
 
-  if (!jobPostElement) {
-    console.warn("Елемент .job-post-page h1 не знайдено.")
-    return
-  }
+  const jobCompanyElement = (await waitForElement(
+    "header a.text-reset"
+  )) as HTMLElement
 
-  const position = jobPostElement.textContent?.trim() || "Не знайдено"
+  const locationElement = (await waitForElement(
+    "aside .card .location-text"
+  )) as HTMLElement
+
+  const liElement = Array.from(
+    document.querySelectorAll("aside .card ul li")
+  ).find(
+    (li) =>
+      li
+        .querySelector("strong")
+        ?.textContent?.toLowerCase()
+        ?.includes("офіс") ||
+      li
+        .querySelector("strong")
+        ?.textContent?.toLowerCase()
+        ?.includes("віддалено")
+  )
+
+  const workTypeText = liElement.querySelector("strong")?.textContent?.trim()
+  const workType = getWorkType(workTypeText)
+  const position = jobPositionElement?.textContent?.trim() || "Не знайдено"
   const link = window.location.href
-  const companyName = ""
+  const companyName = jobCompanyElement?.textContent?.trim() || "Не знайдено"
   const relation = ""
-  const location = ""
-  const workType = "remote"
+  const location = locationElement?.textContent?.trim() || "Не знайдено"
   const status = "saved"
   const notes = ""
 
