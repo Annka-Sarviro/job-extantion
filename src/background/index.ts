@@ -1,21 +1,36 @@
+import { refreshToken as refreshTokenFunction } from "~helpers/auth"
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "JOB_DETAILS") {
     chrome.runtime.sendMessage(message)
   }
 })
 
-chrome.action.onClicked.addListener(() => {
-  chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch((error) => console.error("Failed to open side panel:", error))
-
-  chrome.runtime.sendMessage({ type: "JOB_DETAILS" })
+chrome.runtime.onInstalled.addListener(() => {
+  checkAndOpenOptions()
 })
 
-chrome.tabs.onActivated.addListener(() => {
-  chrome.runtime.sendMessage({ type: "JOB_DETAILS" })
+chrome.runtime.onStartup.addListener(() => {
+  checkAndOpenOptions()
 })
 
-chrome.tabs.onUpdated.addListener(() => {
-  chrome.runtime.sendMessage({ type: "JOB_DETAILS" })
-})
+async function checkAndOpenOptions() {
+  try {
+    const { access_token: accessToken, refresh_token: refreshToken } =
+      await chrome.storage.local.get(["access_token", "refresh_token"])
+
+    if (!accessToken || !refreshToken) {
+      chrome.runtime.openOptionsPage()
+    } else {
+      try {
+        await refreshTokenFunction()
+      } catch (error) {
+        console.error("Failed to refresh token:", error)
+        chrome.runtime.openOptionsPage()
+      }
+    }
+  } catch (error) {
+    console.error("Error accessing storage:", error)
+    chrome.runtime.openOptionsPage()
+  }
+}

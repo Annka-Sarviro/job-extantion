@@ -5,7 +5,6 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "nunito";
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-weight:
@@ -13,4 +12,8 @@
     500,
     700];
   font-style: normal;
+}
+
+body {
+  @apply font-nunito text-text-primary;
 }

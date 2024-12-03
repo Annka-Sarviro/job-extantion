@@ -59,9 +59,10 @@ export const handleDou = async () => {
 handleDou()
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "JOB_DETAILS") {
+  if (message.type === "GET_JOB_DETAILS") {
     if (window.location.href.includes("jobs.dou.ua")) {
       handleDou()
     }
   }
+  return true
 })

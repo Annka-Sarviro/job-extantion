@@ -63,9 +63,10 @@ export const handleFluff = async () => {
 handleFluff()
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "JOB_DETAILS") {
+  if (message.type === "GET_JOB_DETAILS") {
     if (window.location.href.includes("nofluffjobs.com")) {
       handleFluff()
     }
   }
+  return true
 })

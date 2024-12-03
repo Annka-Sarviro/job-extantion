@@ -3,7 +3,7 @@ import { useState } from "react"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import { z } from "zod"
 
-import type { RegSchema } from "./regForm"
+import type { RegSchema } from "./loginForm"
 import { AddDataSchema } from "./submitForm"
 
 type AddDataType = z.infer<typeof AddDataSchema>

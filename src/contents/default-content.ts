@@ -15,42 +15,51 @@ const blockedDomains = [
   "indeed.com"
 ]
 
-export const handle = async () => {
-  const cardElement = (await waitForElement(" h1")) as HTMLElement
+const isBlockedDomain = (): boolean => {
+  const currentUrl = window.location.href
+  return blockedDomains.some((domain) => currentUrl.includes(domain))
+}
 
-  const position = cardElement?.textContent?.trim() || "Не знайдено"
-  const link = `${window.location.origin}${window.location.pathname}`
-  const companyName = ""
-  const relation = ""
-  const location = ""
-  const workType = null
-  const status = "saved"
-  const notes = ""
+const handle = async () => {
+  if (isBlockedDomain()) return
 
-  chrome.runtime.sendMessage({
-    type: "JOB_DETAILS",
-    payload: {
-      position,
-      link,
-      companyName,
-      relation,
-      location,
-      workType,
-      status,
-      notes
-    }
-  })
+  try {
+    const cardElement = (await waitForElement("h1")) as HTMLElement
+
+    const position = cardElement?.textContent?.trim() || "Не знайдено"
+    const link = `${window.location.origin}${window.location.pathname}`
+    const companyName = "Не знайдено"
+    const relation = "Не знайдено"
+    const location = "Не знайдено"
+    const workType = null
+    const status = "saved"
+    const notes = ""
+
+    chrome.runtime.sendMessage({
+      type: "JOB_DETAILS",
+      payload: {
+        position,
+        link,
+        companyName,
+        relation,
+        location,
+        workType,
+        status,
+        notes
+      }
+    })
+  } catch (error) {
+    console.error("Error handling job details:", error)
+  }
 }
 
 handle()
 
-chrome.runtime.onMessage.addListener((message) => {
-  const currentUrl = window.location.href
-  const containsBlockedDomain = blockedDomains.some((domain) =>
-    currentUrl.includes(domain)
-  )
-
-  if (!containsBlockedDomain) {
-    handle()
+chrome.runtime.onMessage.addListener(async (message) => {
+  if (message.type === "GET_JOB_DETAILS") {
+    if (!isBlockedDomain()) {
+      await handle()
+    }
   }
+  return true
 })

@@ -66,9 +66,10 @@ export const handleRobota = async () => {
 handleRobota()
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "JOB_DETAILS") {
+  if (message.type === "GET_JOB_DETAILS") {
     if (window.location.href.includes("robota.ua")) {
       handleRobota()
     }
   }
+  return true
 })

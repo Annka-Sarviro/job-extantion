@@ -12,26 +12,25 @@ export const config: PlasmoCSConfig = {
 
 type JobDetailsPayload = z.infer<typeof AddDataSchema>
 
-// Інтерфейс для повідомлення
 interface JobDetailsMessage {
   type: "JOB_DETAILS"
   payload: JobDetailsPayload
 }
 
 export const handleIndeed = async () => {
+  console.log("indeed")
   const companyElement = (await waitForElement(
     "#jobsearch-ViewjobPaneWrapper"
   )) as HTMLElement
 
-  // const vacancyElement = (await waitForElement(".l-vacancy")) as HTMLElement
   const jobPositionElement =
-    companyElement.querySelector("h2 > span")?.firstChild
+    companyElement?.querySelector("h2 > span")?.firstChild
 
-  const locationElement = companyElement.querySelector(
+  const locationElement = companyElement?.querySelector(
     "[data-testid='inlineHeader-companyLocation']"
   )
 
-  const companyNameEl = companyElement.querySelector(
+  const companyNameEl = companyElement?.querySelector(
     "[data-testid='inlineHeader-companyName']"
   )
 
@@ -72,9 +71,10 @@ export const handleIndeed = async () => {
 handleIndeed()
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "JOB_DETAILS") {
+  if (message.type === "GET_JOB_DETAILS") {
     if (window.location.href.includes("indeed.com")) {
       handleIndeed()
     }
   }
+  return true
 })

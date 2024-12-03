@@ -24,7 +24,7 @@ export const Button = ({
     <button
       className={cn(
         "text-text-primary flex  items-center justify-center rounded-xl py-2 font-nunito text-base font-semibold duration-300",
-        className,
+
         {
           ["min-w-[180px] px-8"]: size == "small",
           ["min-w-[260px] px-12"]: size == "big"
@@ -41,7 +41,8 @@ export const Button = ({
             variant == "ghost",
           ["bg-background-sidebar border:background-sidebar pointer-events-none text-card-gray"]:
             variant == "primary"
-        }
+        },
+        className
       )}
       {...props}>
       {children}

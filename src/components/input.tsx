@@ -2,7 +2,7 @@ import cn from "clsx"
 import type { FieldErrors, UseFormRegister } from "react-hook-form"
 import { z } from "zod"
 
-import type { RegSchema } from "./regForm"
+import type { RegSchema } from "./loginForm"
 import { AddDataSchema } from "./submitForm"
 
 type AddDataType = z.infer<typeof AddDataSchema>
@@ -57,7 +57,7 @@ export const Input = ({
           <input
             id={`input-${name}`}
             className={cn(
-              "peer h-8 w-full rounded-xl border px-4 py-1 font-nunito text-base font-medium text-text-primary transition placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent ",
+              "peer h-8 w-full rounded-xl border px-4 py-1 font-nunito text-base font-medium text-text-primary transition placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent",
               {
                 ["border-successful"]: !error,
                 ["border-error placeholder-shown:border-error focus:border-error active:border-error"]:

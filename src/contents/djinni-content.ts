@@ -17,16 +17,13 @@ interface JobDetailsMessage {
   type: "JOB_DETAILS"
   payload: JobDetailsPayload
 }
-
 export const handleDjinni = async () => {
   const jobPositionElement = (await waitForElement(
     ".job-post-page h1"
   )) as HTMLElement
-
   const jobCompanyElement = (await waitForElement(
     "header a.text-reset"
   )) as HTMLElement
-
   const locationElement = (await waitForElement(
     "aside .card .location-text"
   )) as HTMLElement
@@ -45,7 +42,7 @@ export const handleDjinni = async () => {
         ?.includes("віддалено")
   )
 
-  const workTypeText = liElement.querySelector("strong")?.textContent?.trim()
+  const workTypeText = liElement?.querySelector("strong")?.textContent?.trim()
   const workType = getWorkType(workTypeText) || undefined
 
   const position = jobPositionElement?.textContent?.trim() || "Не знайдено"
@@ -56,7 +53,20 @@ export const handleDjinni = async () => {
   const status = "saved"
   const notes = ""
 
-  chrome.runtime.sendMessage<JobDetailsMessage>({
+  chrome.storage.local.set({
+    jobDetails: {
+      position,
+      link,
+      companyName,
+      relation,
+      location,
+      workType,
+      status,
+      notes
+    }
+  })
+
+  chrome.runtime.sendMessage({
     type: "JOB_DETAILS",
     payload: {
       position,
@@ -74,9 +84,10 @@ export const handleDjinni = async () => {
 handleDjinni()
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "JOB_DETAILS") {
+  if (message.type === "GET_JOB_DETAILS") {
     if (window.location.href.includes("djinni.co")) {
       handleDjinni()
     }
   }
+  return true
 })
