@@ -48,7 +48,7 @@ export const Input = ({
       {label && (
         <label
           htmlFor={`input-${name}`}
-          className="mb-2 block font-nunito text-base font-medium leading-[135%] text-text-primary">
+          className="mb-3 block font-nunito text-xl font-medium leading-[135%] text-text-primary">
           {label}
         </label>
       )}
@@ -57,7 +57,7 @@ export const Input = ({
           <input
             id={`input-${name}`}
             className={cn(
-              "peer h-8 w-full rounded-xl border px-4 py-1 font-nunito text-base font-medium text-text-primary transition placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent",
+              "peer h-11 w-full rounded-xl border px-6 py-[11px] font-nunito text-base font-medium text-text-primary transition placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent",
               {
                 ["border-successful"]: !error,
                 ["border-error placeholder-shown:border-error focus:border-error active:border-error"]:
@@ -118,7 +118,7 @@ export const Input = ({
         {error && (
           <span
             id={`inputError-${name}`}
-            className="absolute right-0 top-[36px] inline-block font-nunito text-base font-medium text-error">
+            className="absolute right-0 top-11 inline-block font-nunito text-base font-medium text-error">
             {String(error?.message)}
           </span>
         )}

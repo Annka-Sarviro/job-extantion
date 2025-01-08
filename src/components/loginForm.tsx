@@ -96,9 +96,9 @@ export const LoginForm = () => {
   return (
     <>
       <form
-        className="bg-background-form shadow-form_shadow space-y-[30px] rounded-[20px] px-12 py-6"
+        className="bg-white shadow-form_shadow space-y-8 rounded-[20px] px-12 py-6"
         onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-[30px]">
+        <div className="flex flex-col gap-4">
           <Input
             register={register}
             resetField={resetField}
@@ -123,46 +123,47 @@ export const LoginForm = () => {
             errors={errors}
           />
         </div>
+        <div className="flex flex-col gap-y-6">
+          <div>Або</div>
+          <div className="flex justify-between gap-5">
+            <Button
+              type="button"
+              className="gap-[12px]"
+              variant="ghost"
+              size="small"
+              onClick={GoogleLogin}>
+              <span className="text-base font-medium text-text-primary">
+                Google
+              </span>
+              <img
+                src={GoogleLogo}
+                className="h-[24px] w-[24px]"
+                alt="Google Logo"
+              />
+            </Button>
 
-        <Button
-          type="submit"
-          className=""
-          disabled={!isDirty || isSending}
-          variant="ghost">
-          Увійти
-        </Button>
-
-        <div className="flex justify-between gap-5">
+            <Button
+              type="button"
+              className="gap-[12px]"
+              variant="ghost"
+              size="small"
+              onClick={GithubLogin}>
+              <span className="text-base font-medium text-text-primary">
+                GitHub
+              </span>
+              <img
+                src={GitHubLogo}
+                className="h-[24px] w-[24px]"
+                alt="Google Logo"
+              />
+            </Button>
+          </div>
           <Button
-            type="button"
-            className="gap-[12px]"
-            variant="ghost"
-            size="small"
-            onClick={GoogleLogin}>
-            <span className="text-base font-medium text-text-primary">
-              Google
-            </span>
-            <img
-              src={GoogleLogo}
-              className="h-[24px] w-[24px]"
-              alt="Google Logo"
-            />
-          </Button>
-
-          <Button
-            type="button"
-            className="gap-[12px]"
-            variant="ghost"
-            size="small"
-            onClick={GithubLogin}>
-            <span className="text-base font-medium text-text-primary">
-              GitHub
-            </span>
-            <img
-              src={GitHubLogo}
-              className="h-[24px] w-[24px]"
-              alt="Google Logo"
-            />
+            type="submit"
+            className=""
+            disabled={!isDirty || isSending}
+            variant="ghost">
+            Увійти
           </Button>
         </div>
       </form>

@@ -110,7 +110,7 @@ export const InputPassword: React.FC<InputPasswordProps> = ({
       {label && (
         <label
           htmlFor={`input-${name}`}
-          className="mb-2 block font-nunito text-base font-medium leading-[135%] text-text-primary">
+          className="mb-3 block font-nunito text-xl font-medium leading-[135%] text-text-primary">
           {label}
         </label>
       )}
@@ -119,7 +119,7 @@ export const InputPassword: React.FC<InputPasswordProps> = ({
           <input
             id={`input-${name}`}
             className={cn(
-              "peer h-8 w-full rounded-xl border py-1 px-4 font-nunito text-base transition font-medium text-text-primary  placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent",
+              "peer h-11 w-full rounded-xl border py-[11px] px-6 font-nunito text-base transition font-medium text-text-primary  placeholder:font-nunito placeholder:text-text-gray placeholder-shown:border-text-primary focus:border-accent focus:outline-none active:border-accent",
               {
                 ["border-successful"]: !error,
                 ["border-error placeholder-shown:border-error focus:border-error active:border-error"]:
