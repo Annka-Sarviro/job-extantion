@@ -23,7 +23,7 @@ export const Button = ({
   return (
     <button
       className={cn(
-        "text-text-primary flex  items-center justify-center rounded-xl py-2 font-nunito text-base font-semibold duration-300",
+        "text-text-primary flex  items-center justify-center rounded-xl py-3 font-nunito text-base font-semibold duration-300",
 
         {
           ["min-w-[180px] px-8"]: size == "small",
@@ -31,7 +31,7 @@ export const Button = ({
         },
 
         !disabled && {
-          ["ring-text-primary hover:ring-accent focus:ring-accent bg-transparent ring-1 ring-inset hover:shadow-button_hover hover:ring-[3px] focus:shadow-button_hover focus:ring-[3px]"]:
+          ["ring-text-primary hover:ring-accent focus:ring-accent bg-transparent ring-[0.75px] ring-inset hover:shadow-button_hover hover:ring-[3px] focus:shadow-button_hover focus:ring-[3px]"]:
             variant == "ghost",
           ["border border-text-primary hover:border-background-dark_blue hover:bg-background-sidebar focus:border-background-dark_blue focus:bg-background-sidebar bg-background-blue "]:
             variant == "primary"

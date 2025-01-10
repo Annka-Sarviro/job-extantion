@@ -13,7 +13,20 @@
     700];
   font-style: normal;
 }
+@layer base {
+  body {
+    @apply font-nunito text-text-primary;
+  }
+}
 
-body {
-  @apply font-nunito text-text-primary;
+@layer components {
+  .line {
+    @apply flex items-center justify-center gap-x-4 px-4;
+  }
+
+  .line::before,
+  .line::after {
+    content: "";
+    @apply block h-[1px] w-full bg-text-gray;
+  }
 }
