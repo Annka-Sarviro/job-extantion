@@ -1,33 +1,31 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+Apply Tracker Chrome Extension
 
-## Getting Started
+Це офіційне розширення Chrome для проєкту **Apply Tracker**. Воно дозволяє зберігати вакансії з популярних платформ прямо з браузера в 1 клік.
 
-First, run the development server:
+---
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+## 🔧 Основні можливості
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+- Витягування назви вакансії, компанії, посилання та дати з поточної сторінки
+- Надсилання інформації до основного застосунку (через API)
+- Інтеграція з сайтами: LinkedIn, Djinni, Work.ua, Rabota.ua, Indeed, Upwork (у планах)
+- Зручний попап-інтерфейс для швидкого редагування перед збереженням
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+---
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+## 🚀 Як встановити (режим розробника)
 
-## Making production build
-
-Run the following:
+1. Склонуйте репозиторій:
 
 ```bash
-pnpm build
-# or
-npm run build
+git clone https://github.com/Annka-Sarviro/apply-tracker-extantion.git
+cd apply-tracker-extension
 ```
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+2. Перейдіть у Chrome → chrome://extensions/
 
-## Submit to the webstores
+3. Увімкніть Режим розробника (Developer mode)
 
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+4. Натисніть "Завантажити розпаковане розширення" (Load unpacked)
+
+5. Оберіть папку apply-tracker-extension/dist
